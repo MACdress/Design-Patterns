@@ -14,7 +14,8 @@ class My{
 			if(m==NULL){
 				m=new My(i,j);
 			}
-		}
+			return m;		
+               }
 		void Print(){
 			cout<<"i="<<i<<endl;
 			cout<<"j="<<j<<endl;
