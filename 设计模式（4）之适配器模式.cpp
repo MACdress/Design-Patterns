@@ -1,4 +1,4 @@
-#include<iostream>
+#include<iostream>//接口适配，实现了软件的复用，接口转换
 using namespace std;
 class Base{
 	public:
