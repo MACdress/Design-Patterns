@@ -1,0 +1,123 @@
+/*策略模式*/
+/*
+把具体的事物与其特性分离开。
+优点：
+1、降低事物与其特性之间的耦合性。
+2、使得具体事物和特性之间可独立扩展。
+*/ 
+#include<iostream>
+using namespace std;
+class TakeoffBehavior {
+	public:
+		virtual void takeoff()=0;
+		~TakeoffBehavior(){
+			cout<<"TakeoffBehavior.des"<<endl;
+		}
+};
+class Vectical:public TakeoffBehavior{
+	public:
+		void takeoff(){
+			cout<<"Vectical's takeoff!"<<endl;
+		}
+		~Vectical(){
+			cout<<"Vectical.des"<<endl;
+		}
+};
+class LongDestance:public TakeoffBehavior{
+		public:
+		void takeoff(){
+			cout<<"LongDestance's takeoff!"<<endl;
+		}
+		~LongDestance(){
+			cout<<"LongDestance.des"<<endl;
+		}
+};
+class FlyBehavior{
+	public:
+		virtual void fly()=0;
+		~FlyBehavior(){
+			cout<<"FlyBehavior.des"<<endl;
+		}
+};
+class SubsonicFly:public FlyBehavior{
+	public:
+		void fly(){
+			cout<<"SubsonicFly.fly"<<endl;
+		}
+		~SubsonicFly(){
+			cout<<"SubsonicFly.des"<<endl;
+		}
+};
+class SuperSonicFly:public FlyBehavior{
+	public:
+		void fly(){
+			cout<<"SuperSonicFly"<<endl;
+		}
+		~SuperSonicFly(){
+			cout<<"SuperSonicFly.des"<<endl;
+		}
+};
+class Plane{
+	private:
+		TakeoffBehavior *t;
+		FlyBehavior *f;
+	public:
+		Plane(TakeoffBehavior *t,FlyBehavior *f){
+			this->t=t;
+			this->f=f;
+		}
+		virtual void takeoff(){
+			cout<<"Plane.takeoff:"<<endl;
+			t->takeoff();
+		}
+		virtual void fly(){
+			cout<<"Plane.fly"<<endl;
+			f->fly();
+		}
+		~Plane(){
+			delete t;
+			delete f;
+			cout<<"Plane.des"<<endl;
+		}
+};
+class Havier:public Plane{
+	public:
+		Havier(TakeoffBehavior *t,FlyBehavior *f):Plane(t,f){
+			cout<<"Havier.con"<<endl;
+		}
+		void takeoff(){
+			cout<<"Havier.takeoff"<<endl;
+			Plane::takeoff();
+		}
+		void fly(){
+			cout<<"Havier.fly"<<endl;
+			Plane::fly();
+		}
+		~Havier(){
+			cout<<"Havier.des"<<endl;
+		}
+};
+class Fighter:public Plane{
+	public:
+		Fighter(TakeoffBehavior *t,FlyBehavior *f):Plane(t,f){
+			cout<<"Fighter.con"<<endl;
+		}
+		void takeoff(){
+			cout<<"Fighter.takeoff"<<endl;
+			Plane::takeoff();
+		}
+		void fly(){
+			cout<<"Fighter.fly"<<endl;
+			Plane::fly();
+		}
+		~Fighter(){
+			cout<<"Fighter.des"<<endl;
+		}
+};
+int main(void){
+	Plane *fighter=new Fighter(new Vectical(),new SubsonicFly());
+	fighter->takeoff();
+	fighter->fly();
+	delete fighter;
+	return 0;
+}
