@@ -1,0 +1,55 @@
+/*模板模式
+优点：
+1、缩小代码之间的耦合程度。
+2、实现公共逻辑后，可以更好的对细节进行描写
+用到的方法：倒置原则：由基类决定调用哪个派生类。
+*/ 
+#include<iostream>
+using namespace std;
+class Abstract{
+protected:
+	virtual void primitive1()=0;
+	virtual void primitive2()=0;
+public:
+	void FindplateMethod(){
+		cout<<"公共逻辑实现！"<<endl;//公共逻辑实现 
+		this->primitive1();//细节描写，实现多态。 
+		this->primitive2();
+	}
+	~Abstract(){
+		cout<<"Abstract.des"<<endl;
+	}
+};
+class ConcreteClassA:public Abstract{
+protected:
+	void primitive1(){
+		cout<<"ConcreteClassA的特有方法1实现"<<endl; 
+	} 
+	void primitive2(){
+		cout<<"ConcreteClassA的特有方法2实现"<<endl; 
+	}
+public:
+	~ConcreteClassA(){
+		cout<<"ConcreteClassA.des"<<endl;
+	}
+};
+class ConcreteClassB:public Abstract{
+protected:
+	void primitive1(){
+		cout<<"ConcreteClassB的特有方法1实现"<<endl; 
+	} 
+	void primitive2(){
+		cout<<"ConcreteClassB的特有方法2实现"<<endl; 
+	}
+public:
+	~ConcreteClassB(){
+		cout<<"ConcreteClassB.des"<<endl;
+	}
+};
+int main(void)
+{
+ Abstract * a=new ConcreteClassB();
+	a->FindplateMethod();
+	delete a;
+	return 0;
+}
