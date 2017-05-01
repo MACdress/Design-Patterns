@@ -1,0 +1,77 @@
+/* 桥接模式
+优点：1、使得抽象和实现可以独立扩展。
+2、降低抽象和实现的耦合度。 
+*/
+#include<iostream>
+using namespace std;
+class	Abstraction{//抽象出来实现的方法 
+	public:
+		virtual  void operation()=0;
+		virtual ~Abstraction(){
+			cout<<"Abstraction.des"<<endl;
+		}
+}; 
+class CorectA:public Abstraction{
+	public:
+		void operation(){
+			cout<<"CorectA方法实现"<<endl; 
+		}
+		~CorectA (){
+			cout<<"CorectA.des"<<endl;
+		}
+}; 
+class CorectB:public Abstraction{
+	public:
+		void operation(){
+			cout<<"CorectB方法实现"<<endl; 
+		}
+		~CorectB(){
+			cout<<"	CorectB.des"<<endl;
+		}
+};
+class Hbstractor{
+	private:
+		Abstraction *a;
+	public:
+		Hbstractor(Abstraction *a){
+			this->a=a;
+		}
+		virtual void operation(){
+			a->operation();
+		}
+		virtual ~Hbstractor(){
+			delete a;
+			cout<<"Hbstractor.des"<<endl;
+		}
+}; 
+class DefinedAbstractA:public Hbstractor{
+	public:
+		DefinedAbstractA(Abstraction *a):Hbstractor(a){
+			cout<<"Defined.com"<<endl;
+		}
+		void operation(){
+			Hbstractor::operation();
+		}
+		~DefinedAbstractA(){
+			cout<<"Defined.des"<<endl; 
+		}
+};
+class DefinedAbstractB:public Hbstractor{
+	public:
+		DefinedAbstractB(Abstraction *a):Hbstractor(a){
+			cout<<"Defined.com"<<endl;
+		}
+		void operation(){
+			Hbstractor::operation();
+		}
+		~DefinedAbstractB(){
+			cout<<"Defined.des"<<endl; 
+		}
+};
+int main(void)
+{
+	Hbstractor *h=new DefinedAbstractA(new CorectA());
+	h->operation();
+	delete h;
+	return 0;
+}
