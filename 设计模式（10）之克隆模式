@@ -1,0 +1,56 @@
+/* 
+原型模式-->克隆模式（对象）
+ 重点难点：
+ 复制构造函数：通过 一个对象，初始化 另一个对象。（*引用不产生新的单元） 
+*/ 
+#include<iostream>
+using namespace std;
+class   Prototype{
+	private:
+		int x,y;
+	public:
+		Prototype(int x,int y){
+			cout<<"Prototype有参"<<endl; 
+			this->x=x;
+			this->y=y;
+		}
+		Prototype(){
+			cout<<"Prototype无参"<<endl; 
+			this->x=0;
+			this->y=0;
+		}
+		virtual Prototype* clone()=0; 
+		virtual ~Prototype(){
+			cout<<"Prototypr.des"<<endl; 
+		}
+};
+class ConBratePrototype:public Prototype{
+	public:
+		ConBratePrototype(int x,int y):Prototype(x,y){
+			cout<<"ConBratePrototype有参"<<endl; 
+		}
+		ConBratePrototype(){
+			cout<<"ConBratePrototype无参"<<endl; 
+		}
+		ConBratePrototype(ConBratePrototype &t){
+			cout<<"ConBratePrototype拷贝构造函数调用"<<endl;
+			*this=t; 
+		} 
+		Prototype* clone(){
+			cout<<"克隆对象"<<endl; 
+			return new ConBratePrototype(*this);
+		}
+		~ConBratePrototype(){
+			cout<<"ConBratePrototype.des"<<endl;
+		}
+};
+int main(void)
+{
+	Prototype *p1=new 	ConBratePrototype(3,5);
+	Prototype *p2=p1->clone();
+	delete p1;
+	delete p2;
+	p1=NULL;
+	p2=NULL;
+	return 0;
+}
