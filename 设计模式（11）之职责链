@@ -1,0 +1,94 @@
+/*职责链*/ 
+#include<iostream>
+using namespace std;
+class A{
+	private:
+		A*next;
+	public:
+		A(A* t){
+			next=t;
+		}
+		A(){
+			next=NULL;
+		}
+		virtual  void Print(){//按顺序输出职责链 
+			if(next){
+				next->Print();
+			}
+		}
+		virtual void free(){//释放职责链 
+			if(next){
+				next->free();
+				delete next;
+			}
+		}
+		virtual ~A(){
+			cout<<"A.des"<<endl;
+		}
+}; 
+class A1:public A{
+	public:
+		A1(A *t):A(t){
+			cout<<"A1.con"<<endl;
+		}
+		A1(){
+			cout<<"A1.con"<<endl;
+		}
+		void Print(){
+			cout<<"A1.print"<<endl;
+			A::Print();
+		}
+		void free(){
+			A::free();
+		}
+		~A1(){
+			cout<<"A1.des"<<endl;
+		}
+};
+class A2:public A{
+	public:
+		A2(A *t):A(t){
+			cout<<"A2.con"<<endl;
+		}
+		A2(){
+			cout<<"A2.con"<<endl;
+		}
+		void Print(){
+			cout<<"A2.print"<<endl;
+			A::Print();
+		}
+		void free(){
+			A::free();
+		}
+		~A2(){
+			cout<<"A2.des"<<endl;
+		}
+};
+class A3:public A{
+	public:
+		A3(A3 *t):A(t){
+			cout<<"A3.con"<<endl;
+		}
+		A3(){
+			cout<<"A3.con"<<endl;
+		}
+		void Print(){
+			cout<<"A3.print"<<endl;
+			A::Print();
+		}
+		void free(){
+			A::free();
+		}
+		~A3(){
+			cout<<"A3.des"<<endl;
+		}
+};
+int main(void)
+{
+	A3 *a3=new A3();
+	A2 *a2=new A2(a3);
+	A  *a=new A1(a2);
+	a->Print();
+	a->free();
+	delete a;
+}
