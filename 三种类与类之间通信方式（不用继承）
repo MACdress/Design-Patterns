@@ -1,0 +1,107 @@
+/*三种类间通信方式*/
+/*(1)*/
+#include<iostream>
+using namespace std;
+class B;
+class A{
+	private:B *b;
+	public:
+		A(B*b){
+			this->b=b;
+		}
+		void fun();
+		~A(){
+			cout<<"A.des"<<endl;
+		}
+}; 
+class B{
+	private :A*a;
+	public :
+		void set(A*a){
+			this->a=a; 
+		}
+		void hun(){
+			cout<<"hun.con"<<endl;
+			a->fun();
+		}
+		void gun(){
+			cout<<"gun.con"<<endl;
+		}
+};
+void A::fun(){
+	cout<<"fun.con"<<endl;
+	b->gun();
+}
+int main(void)
+{
+	B *b=new B();
+	A *a=new A(b);
+	b->set(a);
+	b->hun();
+	return 0;
+}
+-----------------------------------
+/*(2)*/
+class B;
+class A{
+	public:
+		void fun(B *b);
+		~A(){
+			cout<<"A.des"<<endl;
+		}
+};
+class B{
+	private:A *a;
+	public:
+		B(A*a){
+			this->a=a;
+		}
+		void hun(){
+			cout<<"hun.con"<<endl;
+			a->fun(this);
+		}
+		void gun(){
+			cout<<"gun.com"<<endl;
+		}
+};
+void A::fun(B *b){
+			cout<<"fun.com"<<endl;
+			b->gun();
+		}
+int main(void){
+	A *a=new A();
+	B *b=new B(a);
+	b->hun();
+	return 0;
+}
+-----------------------------------------
+class B;
+class A{
+	public:
+		void fun(B *b);
+		~A(){
+			cout<<"fun.com"<<endl;
+		}
+};
+class B{
+	public:
+		void hun(A *a){
+			cout<<"hun.con"<<endl;
+			a->fun(this);
+		}
+		void gun(){
+			cout<<"gun.con"<<endl;
+		}
+};
+void A::fun(B*b){
+	cout<<"fun.com"<<endl;
+	b->gun();
+}
+int main(void)
+{
+	A *a=new A();
+	B *b=new B();
+	b->hun(a);
+	return 0;
+	
+}	
