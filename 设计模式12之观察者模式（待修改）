@@ -1,0 +1,83 @@
+#include<iostream>
+#include<vector> 
+using namespace std;
+class Subject;
+class Observer{
+	public:Observer(Subject*);
+	virtual void updata(int x,int y)=0;;
+	virtual ~Observer(){
+		cout<<"Observer.des"<<endl;
+	}
+}; 
+class Subject{
+	private:
+		vector<Observer *> vec;
+	public:
+		virtual void Add(Observer *t){
+			vec.push_back(t);
+		}
+		 void Notify(int x,int y){
+			vector<Observer *>::iterator i;
+			for(i=vec.begin();i!=vec.end();i++){
+				(*i)->updata(x,y);
+			}
+		}
+		~Subject(){
+			cout<<"Subject.des"<<endl;
+		}
+};
+class CreteASubject:public Subject{
+	private:int x, y;
+	public:
+		CreteASubject(int x,int y){
+			this->x=x;
+			this->y=y;
+			Notify(x,y);
+		}
+		CreteASubject(){
+			x=y=0;
+			Notify(x,y);
+		}
+		void set(int x,int y){
+			this->x=x;
+			this->y=y;
+			Notify(x,y);
+		}
+		~CreteASubject(){
+			cout<<"CreteASubject.des"<<endl;
+		}
+};
+Observer::Observer(Subject *s){
+	s->Add(this);
+}
+class ObserverA:public Observer{
+	private:int x,y;
+	public:
+		ObserverA(Subject *a):Observer(a){
+		}
+		void updata(int x,int y){
+			this->x=x;
+			this->y=y;
+		}
+		void Print(){
+			cout<<"x="<<x<<endl;
+			cout<<"y="<<y<<endl;
+		}
+		~ObserverA(){
+			cout<<"ObserverA.des"<<endl;
+		}
+};
+int main(void)
+{
+	CreteASubject *s=new CreteASubject();
+	ObserverA *o1=new ObserverA(s);
+	s->set(3,5);
+	o1->Print();
+	ObserverA *o2=new ObserverA(s);
+	s->set(4,8);
+	o2->Print();
+	o1->Print();
+	delete s;
+	delete o1;
+	delete o2;
+}
