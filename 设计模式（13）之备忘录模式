@@ -1,0 +1,82 @@
+/*备忘录模式 -->临时状态的存储
+作用：在不破坏封装的前提下，捕获一个对象的内部状态，
+并在该对象之外保存该对象状态*/
+#include<iostream>
+#include<cstring>
+#include<set>
+using namespace std;
+
+ class Monmentor;//备忘录；
+ class Caretaker;//备忘录管理库 
+ class Orginator{//发起者 
+ 	private:string state;
+ 	public:
+ 		void Setstate(string s);//数据的变化 
+ 		void CreateMonmentor(Caretaker *t);//创建一个备忘录，給备忘录管理员 
+		void RestorMonmentor(Caretaker *t,int i);//获得之前第i次备忘录中的数据。
+		void shows();//输出当前的数据 
+		~Orginator(){
+			cout<<"Orginator.des"<<endl;
+		} 
+ }; 
+ class Monmentor{
+ 	private:
+ 		string state;
+ 		Monmentor(string);
+ 	public: friend class Orginator;
+ };
+ class Caretaker{
+ 	private:
+ 		set<Monmentor *>vec;
+ 	public:
+ 		void Set(Monmentor *t);
+ 		Monmentor * update(int i);
+ };
+ void Orginator::Setstate(string s){
+ 	state=s;
+ }
+ void Orginator::CreateMonmentor(Caretaker *t){
+ 	t->Set(new Monmentor(state));
+ }
+ void Orginator::RestorMonmentor(Caretaker *t,int i){
+ 	Monmentor *s=t->update(i);
+ 	this->state=s->state;
+ }
+ void Orginator::shows(){
+ 	cout<<state<<endl;
+ }
+  Monmentor::Monmentor(string s){
+ 	this->state=s;
+ }
+ void Caretaker::Set(Monmentor *t){
+ 	vec.insert(t);
+ }
+ Monmentor * Caretaker::update(int i){
+ 	int j=0;
+ 	set<Monmentor *>::iterator k=vec.begin();
+ 	while(k!=vec.end()){
+ 		if(j==i){
+ 			return (*k);
+ 		}
+ 		k++;
+ 		j++;
+ 	}
+ 	cout<<"输入错误"<<endl;
+	 return (*vec.end()); 
+ }
+ int main(void){
+ 	string codes;
+ 	Caretaker *m=new Caretaker();
+ 	Orginator *o=new Orginator();
+ 	for(int i=0;i<5;i++){
+ 		cin>>codes;
+ 		o->Setstate(codes);
+ 		o->CreateMonmentor(m);
+ 	}
+ 	o->shows();
+ 		int n;
+ 		cin>>n;
+ 		o->RestorMonmentor(m,n-1);
+ 	o->shows();
+ 	return 0;
+ }
